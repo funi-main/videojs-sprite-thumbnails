@@ -52,7 +52,7 @@ export default function spriteThumbs(player, options) {
       const numberOfSeconds = Math.round(hoverTime);
       const imageNumber = pad(Math.round((numberOfSeconds - 5) / 10), 5);
 
-      return url.replace('00000', imageNumber);
+      return url.replace('00001', imageNumber);
     };
 
     const hijackMouseTooltip = (evt) => {
