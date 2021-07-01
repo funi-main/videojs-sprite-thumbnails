@@ -40,6 +40,21 @@ export default function spriteThumbs(player, options) {
       });
     };
 
+    const pad = function(num, size) {
+      num = num.toString();
+      while (num.length < size) {
+        num = '0' + num;
+      }
+      return num;
+    };
+
+    const thumbnailUrl = function(hoverTime, duration) {
+      const numberOfSeconds = Math.round(hoverTime);
+      const imageNumber = pad(Math.round((numberOfSeconds - 5) / 10), 5);
+
+      return url.replace('00000', imageNumber);
+    };
+
     const hijackMouseTooltip = (evt) => {
       const imgWidth = img.naturalWidth;
       const imgHeight = img.naturalHeight;
@@ -52,25 +67,20 @@ export default function spriteThumbs(player, options) {
         const playerWidth = player.currentWidth();
         const scaleFactor = responsive && playerWidth < responsive ?
           playerWidth / responsive : 1;
-        const columns = imgWidth / width;
         const scaledWidth = width * scaleFactor;
         const scaledHeight = height * scaleFactor;
-        const cleft = Math.floor(position % columns) * -scaledWidth;
-        const ctop = Math.floor(position / columns) * -scaledHeight;
-        const bgSize = (imgWidth * scaleFactor) + 'px ' +
-                       (imgHeight * scaleFactor) + 'px';
         const controlsTop = dom.findPosition(controls.el()).top;
         const seekBarTop = dom.findPosition(seekBarEl).top;
+        const thumbnailSrc = thumbnailUrl(position, player.duration(), url);
         // top of seekBar is 0 position
         const topOffset = -scaledHeight - Math.max(0, seekBarTop - controlsTop);
 
         tooltipStyle({
           'width': scaledWidth + 'px',
           'height': scaledHeight + 'px',
-          'background-image': 'url(' + url + ')',
+          'background-image': 'url(' + thumbnailSrc + ')',
           'background-repeat': 'no-repeat',
-          'background-position': cleft + 'px ' + ctop + 'px',
-          'background-size': bgSize,
+          'background-size': 'cover',
           'top': topOffset + 'px',
           'color': '#fff',
           'text-shadow': '1px 1px #000',
