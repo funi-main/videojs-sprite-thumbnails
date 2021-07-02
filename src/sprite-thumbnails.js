@@ -14,6 +14,7 @@ export default function spriteThumbs(player, options) {
   const height = options.height;
   const width = options.width;
   const responsive = options.responsive;
+  const additionalTopOffset = options.additionalTopOffset || 0;
 
   const dom = videojs.dom || videojs;
   const controls = player.controlBar;
@@ -73,7 +74,7 @@ export default function spriteThumbs(player, options) {
         const seekBarTop = dom.findPosition(seekBarEl).top;
         const thumbnailSrc = thumbnailUrl(position, player.duration(), url);
         // top of seekBar is 0 position
-        const topOffset = -scaledHeight - Math.max(0, seekBarTop - controlsTop);
+        const topOffset = -scaledHeight - Math.max(0, seekBarTop - controlsTop) - additionalTopOffset;
 
         tooltipStyle({
           'width': scaledWidth + 'px',
@@ -84,8 +85,10 @@ export default function spriteThumbs(player, options) {
           'top': topOffset + 'px',
           'color': '#fff',
           'text-shadow': '1px 1px #000',
-          'border': '1px solid #000',
-          'margin': '0 1px'
+          'border': '1px solid #fff',
+          'margin': '0 1px',
+          'box-shadow': '0 4px 4px 0 rgba(0, 0, 0, 0.25)',
+          'border-radius': '5px'
         });
       }
     };
@@ -101,7 +104,9 @@ export default function spriteThumbs(player, options) {
       'color': '',
       'text-shadow': '',
       'border': '',
-      'margin': ''
+      'margin': '',
+      'box-shadow': '',
+      'border-radius': ''
     });
 
     progress.on('mousemove', hijackMouseTooltip);

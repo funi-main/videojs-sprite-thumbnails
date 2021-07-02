@@ -28,6 +28,7 @@
     var height = options.height;
     var width = options.width;
     var responsive = options.responsive;
+    var additionalTopOffset = options.additionalTopOffset || 0;
     var dom = videojs.dom || videojs;
     var controls = player.controlBar;
     var progress = controls.progressControl;
@@ -57,7 +58,7 @@
         num = num.toString();
 
         while (num.length < size) {
-          num = "0" + num;
+          num = '0' + num;
         }
 
         return num;
@@ -66,7 +67,7 @@
       var thumbnailUrl = function thumbnailUrl(hoverTime, duration) {
         var numberOfSeconds = Math.round(hoverTime);
         var imageNumber = pad(Math.round((numberOfSeconds - 5) / 10), 5);
-        return url.replace('00000', imageNumber);
+        return url.replace('00001', imageNumber);
       };
 
       var hijackMouseTooltip = function hijackMouseTooltip(evt) {
@@ -84,7 +85,7 @@
           var seekBarTop = dom.findPosition(seekBarEl).top;
           var thumbnailSrc = thumbnailUrl(position, player.duration(), url); // top of seekBar is 0 position
 
-          var topOffset = -scaledHeight - Math.max(0, seekBarTop - controlsTop);
+          var topOffset = -scaledHeight - Math.max(0, seekBarTop - controlsTop) - additionalTopOffset;
           tooltipStyle({
             'width': scaledWidth + 'px',
             'height': scaledHeight + 'px',
@@ -94,8 +95,10 @@
             'top': topOffset + 'px',
             'color': '#fff',
             'text-shadow': '1px 1px #000',
-            'border': '1px solid #000',
-            'margin': '0 1px'
+            'border': '1px solid #fff',
+            'margin': '0 1px',
+            'box-shadow': '0 4px 4px 0 rgba(0, 0, 0, 0.25)',
+            'border-radius': '5px'
           });
         }
       };
@@ -111,7 +114,9 @@
         'color': '',
         'text-shadow': '',
         'border': '',
-        'margin': ''
+        'margin': '',
+        'box-shadow': '',
+        'border-radius': ''
       });
       progress.on('mousemove', hijackMouseTooltip);
       progress.on('touchmove', hijackMouseTooltip);
